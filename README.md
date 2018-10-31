@@ -1,0 +1,2 @@
+# moneybear
+Go money library
