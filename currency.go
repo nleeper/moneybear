@@ -13,7 +13,12 @@ type Currency struct {
 }
 
 var validCurrencies = map[string]*Currency{
-	"USD": &Currency{"USD", 2},
+	"USD": buildCurrency("USD", 2),
+	"GBP": buildCurrency("GBP", 2),
+}
+
+func buildCurrency(code string, decimals int) *Currency {
+	return &Currency{code, decimals}
 }
 
 func getCurrencyByCode(currencyCode string) (*Currency, error) {
@@ -21,4 +26,8 @@ func getCurrencyByCode(currencyCode string) (*Currency, error) {
 		return currency, nil
 	}
 	return nil, errors.New("Invalid currency code")
+}
+
+func (c *Currency) isEqual(c2 *Currency) bool {
+	return c.code == c2.code
 }
