@@ -1,6 +1,9 @@
 package moneybear
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/pkg/errors"
 )
 
@@ -152,6 +155,35 @@ func (m *Money) LessThanOrEqual(m2 *Money) (bool, error) {
 
 	return m.amount.value <= m2.amount.value, nil
 
+}
+
+// Format returns a string representation of the Money object, using the currency's settings.
+func (m *Money) Format() string {
+	sa := strconv.FormatInt(absolute(m.Amount()), 10)
+
+	if len(sa) <= m.currency.precision {
+		sa = strings.Repeat("0", m.currency.precision-len(sa)+1) + sa
+	}
+
+	if m.currency.thousand != "" {
+		for i := len(sa) - m.currency.precision - 3; i > 0; i -= 3 {
+			sa = sa[:i] + m.currency.thousand + sa[i:]
+		}
+	}
+
+	if m.currency.precision > 0 {
+		sa = sa[:len(sa)-m.currency.precision] + m.currency.decimal + sa[len(sa)-m.currency.precision:]
+	}
+
+	if m.currency.symbol != "" {
+		sa = m.currency.symbol + sa
+	}
+
+	if m.Amount() < 0 {
+		sa = "-" + sa
+	}
+
+	return sa
 }
 
 func (m *Money) checkCurrencyEqual(m2 *Money) error {

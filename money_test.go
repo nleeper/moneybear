@@ -193,6 +193,48 @@ func TestAllocate(t *testing.T) {
 	assert.Equal(t, int64(75), split2[1].Amount())
 }
 
+func TestFormatUSD(t *testing.T) {
+	new := createUSD(100)
+	assert.Equal(t, "$1.00", new.Format())
+
+	new2 := createUSD(1)
+	assert.Equal(t, "$0.01", new2.Format())
+
+	new3 := createUSD(18)
+	assert.Equal(t, "$0.18", new3.Format())
+
+	new4 := createUSD(123456)
+	assert.Equal(t, "$1,234.56", new4.Format())
+}
+
+func TestFormatGBP(t *testing.T) {
+	new := create(100, "GBP")
+	assert.Equal(t, "£1.00", new.Format())
+
+	new2 := create(1, "GBP")
+	assert.Equal(t, "£0.01", new2.Format())
+
+	new3 := create(18, "GBP")
+	assert.Equal(t, "£0.18", new3.Format())
+
+	new4 := create(123456, "GBP")
+	assert.Equal(t, "£1,234.56", new4.Format())
+}
+
+func TestFormatEUR(t *testing.T) {
+	new := create(100, "EUR")
+	assert.Equal(t, "€1.00", new.Format())
+
+	new2 := create(1, "EUR")
+	assert.Equal(t, "€0.01", new2.Format())
+
+	new3 := create(18, "EUR")
+	assert.Equal(t, "€0.18", new3.Format())
+
+	new4 := create(123456, "EUR")
+	assert.Equal(t, "€1,234.56", new4.Format())
+}
+
 func create(amount int64, currency string) *Money {
 	m, _ := New(amount, currency)
 	return m
