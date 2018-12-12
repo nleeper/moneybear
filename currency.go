@@ -8,17 +8,21 @@ import (
 
 // Currency represents the values making up a currency.
 type Currency struct {
-	code     string
-	decimals int
+	code      string
+	precision int
+	symbol    string
+	decimal   string
+	thousand  string
 }
 
 var validCurrencies = map[string]*Currency{
-	"USD": buildCurrency("USD", 2),
-	"GBP": buildCurrency("GBP", 2),
+	"USD": buildCurrency("USD", 2, "$", ".", ","),
+	"GBP": buildCurrency("GBP", 2, "£", ".", ","),
+	"EUR": buildCurrency("EUR", 2, "€", ".", ","),
 }
 
-func buildCurrency(code string, decimals int) *Currency {
-	return &Currency{code, decimals}
+func buildCurrency(code string, decimals int, symbol string, decimal string, thousand string) *Currency {
+	return &Currency{code, decimals, symbol, decimal, thousand}
 }
 
 func getCurrencyByCode(currencyCode string) (*Currency, error) {
